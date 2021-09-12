@@ -1,12 +1,13 @@
 import { PacketType } from "../enums";
-import { IPacket } from "./packet";
+import Packet from "./packet";
 
-export class AcknowledgementPacket implements IPacket {
-	public readonly type: PacketType = PacketType.ACKNOWLEDGEMENT
+export default class AcknowledgementPacket extends Packet {
+	public static readonly type: PacketType = PacketType.ACKNOWLEDGEMENT;
 	public readonly nonce: number;
 	public readonly missing_packets: number
 
 	public constructor(nonce: number, missing_packets: number) {
+		super(AcknowledgementPacket.type);
 		this.nonce = nonce;
 		this.missing_packets = missing_packets;
 	}
@@ -20,6 +21,7 @@ export class AcknowledgementPacket implements IPacket {
 	}
 
 	public static deserialize(buffer: Buffer): AcknowledgementPacket {
+		AcknowledgementPacket.check(AcknowledgementPacket.type, buffer);
 		return new AcknowledgementPacket(buffer.readUInt16BE(1), buffer.readUInt8(3));
 	}
 }

@@ -1,11 +1,12 @@
 import { PacketType } from "../enums";
-import { IPacket } from "./packet";
+import Packet from "./packet";
 
-export class PingPacket implements IPacket {
-	public readonly type: PacketType = PacketType.PING;
+export default class PingPacket extends Packet {
+	public static readonly type: PacketType = PacketType.PING;
 	public readonly nonce: number;
 
 	public constructor(nonce: number) {
+		super(PingPacket.type);
 		this.nonce = nonce;
 	}
 
@@ -14,6 +15,7 @@ export class PingPacket implements IPacket {
 	}
 
 	public static deserialize(buffer: Buffer): PingPacket {
-		return new PingPacket(buffer.readUInt32BE(1));
+		PingPacket.check(PingPacket.type, buffer);
+		return new PingPacket(buffer.readUInt16BE(1));
 	}
 }
