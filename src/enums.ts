@@ -11,4 +11,5 @@ export enum ChatNoteType {
 export enum PacketType {
 	RELIABLE = 0x01,
 	HELLO = 0x08,
+	ACK = 0x0a,
 }
