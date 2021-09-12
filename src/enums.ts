@@ -1,4 +1,4 @@
-import { ReliablePacket } from "./packet/reliable";
+import { ReliablePacket } from "./packets/reliable";
 
 export enum AlterGameTag {
 	CHANGE_PRIVACY = 1,

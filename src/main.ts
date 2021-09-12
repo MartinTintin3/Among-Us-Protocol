@@ -1,6 +1,6 @@
 import * as udp from "dgram";
 import { PacketType } from "./enums";
-import { HelloPacket } from "./packet/hello";
+import { HelloPacket } from "./packets/hello";
 import { Version } from "./version";
 
 const client: udp.Socket = udp.createSocket("udp4");
