@@ -1,13 +1,12 @@
 import { PacketType } from "../enums";
-import { Byte } from "../types/byte";
 import { IPacket } from "./packet";
 
-export class AckPacket implements IPacket {
-	public readonly type: PacketType = PacketType.ACK;
+export class AcknowledgementPacket implements IPacket {
+	public readonly type: PacketType = PacketType.ACKNOWLEDGEMENT
 	public readonly nonce: number;
-	public readonly missing_packets: Byte
+	public readonly missing_packets: number
 
-	public constructor(nonce: number, missing_packets: Byte) {
+	public constructor(nonce: number, missing_packets: number) {
 		this.nonce = nonce;
 		this.missing_packets = missing_packets;
 	}
@@ -18,5 +17,9 @@ export class AckPacket implements IPacket {
 		buffer.writeUInt16BE(this.nonce, 1);
 		buffer.writeUInt8(this.missing_packets, 3);
 		return buffer;
+	}
+
+	public static deserialize(buffer: Buffer): AcknowledgementPacket {
+		return new AcknowledgementPacket(buffer.readUInt16BE(1), buffer.readUInt8(3));
 	}
 }

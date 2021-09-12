@@ -1,4 +1,5 @@
-import udp = require("dgram");
+import * as udp from "dgram";
+import { PacketType } from "./enums";
 import { HelloPacket } from "./packet/hello";
 import { Version } from "./version";
 
@@ -10,7 +11,12 @@ client.connect(22023, "na.mm.among.us", () => {
 	client.send(new HelloPacket(1, 1, Version.to_number(2021, 6, 30, 0), "Martin").serialize());
 
 	client.on("message", message => {
-		console.log(`Message: ${message.toString("hex")}`);
+		const type: PacketType = message.readUInt8(0);
+		if(PacketType[type]) {
+			console.log(`Received packet of type ${PacketType[type]}, message: ${message.toString("hex", 1)}`);
+		} else {
+			console.log(`Received unknown packet of type ${type}`);
+		}
 	});
 
 	client.on("error", error => {

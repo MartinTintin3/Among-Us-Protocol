@@ -1,3 +1,4 @@
-import { AckPacket } from "./packet/ack";
+import { Vector2 } from "./types/vector2";
 
-console.log(new AckPacket(7, 0xff).serialize());
+const vector: Vector2 = new Vector2(404419, 4911);
+console.log(Vector2.deserialize(vector));
