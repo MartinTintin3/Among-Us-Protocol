@@ -3,13 +3,14 @@ import Packet from "./packet";
 
 export default class HelloPacket extends Packet {
 	public static readonly type: PacketType = PacketType.HELLO;
+	public static readonly should_acknowledge: boolean = true;
 	public readonly nonce: number;
 	public readonly hazel_version: number;
 	public readonly client_version: number;
 	public readonly username: string;
 
 	constructor(nonce: number, hazel_version: number, client_version: number, username: string) {
-		super(HelloPacket.type);
+		super(HelloPacket.type, HelloPacket.should_acknowledge);
 		this.nonce = nonce;
 		this.hazel_version = hazel_version;
 		this.client_version = client_version;

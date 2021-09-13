@@ -3,11 +3,12 @@ import Packet from "./packet";
 
 export default class AcknowledgementPacket extends Packet {
 	public static readonly type: PacketType = PacketType.ACKNOWLEDGEMENT;
+	public static readonly should_acknowledge: boolean = false;
 	public readonly nonce: number;
 	public readonly missing_packets: number
 
 	public constructor(nonce: number, missing_packets: number) {
-		super(AcknowledgementPacket.type);
+		super(AcknowledgementPacket.type, AcknowledgementPacket.should_acknowledge);
 		this.nonce = nonce;
 		this.missing_packets = missing_packets;
 	}

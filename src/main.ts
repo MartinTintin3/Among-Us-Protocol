@@ -1,7 +1,11 @@
 import * as udp from "dgram";
 import * as fs from "fs";
 import { PacketType } from "./enums";
+import AcknowledgementPacket from "./packets/acknowledgement";
 import HelloPacket from "./packets/hello";
+import Packet from "./packets/packet";
+import PingPacket from "./packets/ping";
+import ReliablePacket from "./packets/reliable";
 import { Version } from "./version";
 
 const client: udp.Socket = udp.createSocket("udp4");
@@ -28,12 +32,22 @@ const client: udp.Socket = udp.createSocket("udp4");
 	
 		client.send(new HelloPacket(1, 1, Version.to_number(2021, 6, 30, 0), "Martin").serialize());
 	
-		client.on("message", message => {
+		client.on("message", async message => {
 			const type: PacketType = message.readUInt8(0);
 			if(PacketType[type] && ![PacketType.PING, PacketType.ACKNOWLEDGEMENT].includes(type)) {
 				console.log(`Received packet of type ${PacketType[type]}, message: ${message.toString("hex", 1)}`);
 			} else if(!PacketType[type]) {
-				console.log(`Received unknown packet of type ${type}`);
+				console.log(`Received unknown packet of type ${message.readUInt8(0)}`);
+			}
+			let packet: any;
+			try {
+				packet = (await import(`./packets/${PacketType[type].toLowerCase()}`)).default.deserialize(message);
+				if(packet.should_acknowledge) {
+					client.send(new AcknowledgementPacket(packet.nonce, 0xff).serialize());
+				}
+
+			} catch(e) {
+				packet = Packet.deserialize(message);
 			}
 		});
 	
