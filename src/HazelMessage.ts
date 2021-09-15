@@ -1,10 +1,12 @@
+import { byte, uint16 } from "./types/numbers";
+
 export class HazelMessage {
-	length: number;
-	tag: number;
+	length: uint16;
+	tag: byte;
 	payload: Buffer;
 
-	constructor(length: number, tag: number, payload: Buffer) {
-		this.length = length;
+	constructor(tag: number, payload: Buffer) {
+		this.length = payload.length;
 		this.tag = tag;
 		this.payload = payload;
 	}
@@ -19,6 +21,6 @@ export class HazelMessage {
 
 	public static deserialize(buffer: Buffer): HazelMessage {
 		const length = buffer.readUInt16BE(0);
-		return new HazelMessage(length, buffer.readUInt8(2), buffer.slice(3, length));
+		return new HazelMessage(buffer.readUInt8(2), buffer.slice(3, length));
 	}
 }

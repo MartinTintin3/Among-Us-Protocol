@@ -1,16 +1,16 @@
 import { PacketType } from "../enums";
+import { byte, int32, uint16 } from "../types/numbers";
 import Packet from "./packet";
 
 export default class HelloPacket extends Packet {
 	public static readonly type: PacketType = PacketType.HELLO;
-	public static readonly should_acknowledge: boolean = true;
-	public readonly nonce: number;
-	public readonly hazel_version: number;
-	public readonly client_version: number;
+	public readonly nonce: uint16;
+	public readonly hazel_version: byte;
+	public readonly client_version: int32;
 	public readonly username: string;
 
-	constructor(nonce: number, hazel_version: number, client_version: number, username: string) {
-		super(HelloPacket.type, HelloPacket.should_acknowledge);
+	constructor(nonce: uint16, hazel_version: byte, client_version: int32, username: string) {
+		super();
 		this.nonce = nonce;
 		this.hazel_version = hazel_version;
 		this.client_version = client_version;
@@ -18,8 +18,8 @@ export default class HelloPacket extends Packet {
 	}
 
 	public serialize(): Buffer {
-		const buffer = Buffer.alloc(9 + this.username.length);
-		buffer.writeUInt8(this.type, 0);
+		const buffer: Buffer = Buffer.alloc(9 + this.username.length);
+		buffer.writeUInt8(HelloPacket.type, 0);
 		buffer.writeUInt16BE(this.nonce, 1);
 		buffer.writeUInt8(this.hazel_version, 3);
 		buffer.writeInt32LE(this.client_version, 4);
@@ -29,7 +29,6 @@ export default class HelloPacket extends Packet {
 	}
 
 	public static deserialize(buffer: Buffer): HelloPacket {
-		HelloPacket.check(HelloPacket.type, buffer);
 		return new HelloPacket(buffer.readUInt8(1), buffer.readUInt8(3), buffer.readInt32LE(4), buffer.toString("utf8", 9, 9 + buffer.readUInt8(8)));
 	}
 }

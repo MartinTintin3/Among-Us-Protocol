@@ -1,4 +1,4 @@
-import { lerp, alerp, clamp } from "../math";
+import { lerp, alerp, clamp } from "./math";
 
 export class Vector2 {
 	public x: number;

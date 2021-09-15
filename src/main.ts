@@ -1,17 +1,17 @@
 import * as udp from "dgram";
 import * as fs from "fs";
-import { PacketType } from "./enums";
+import { PacketsToAcknowledged, PacketType } from "./enums";
 import AcknowledgementPacket from "./packets/acknowledgement";
 import HelloPacket from "./packets/hello";
 import Packet from "./packets/packet";
 import PingPacket from "./packets/ping";
 import ReliablePacket from "./packets/reliable";
-import { Version } from "./version";
+import { Version } from "./utils/Version";
 
 const client: udp.Socket = udp.createSocket("udp4");
 
 (async () => {
-	for(const file of fs.readdirSync("./handlers")) {
+	/*for(const file of fs.readdirSync("./handlers")) {
 		if(file.endsWith(".js") && file != "handler.js") {
 			const handler = (await import(`./handlers/${file}`)).default;
 			client.on("message", async message => {
@@ -25,7 +25,7 @@ const client: udp.Socket = udp.createSocket("udp4");
 				}
 			});
 		}
-	}
+	}*/
 
 	client.connect(22023, "na.mm.among.us", () => {
 		console.log(`Connected to ${client.remoteAddress().address}:${client.remoteAddress().port}`);
@@ -35,19 +35,18 @@ const client: udp.Socket = udp.createSocket("udp4");
 		client.on("message", async message => {
 			const type: PacketType = message.readUInt8(0);
 			if(PacketType[type] && ![PacketType.PING, PacketType.ACKNOWLEDGEMENT].includes(type)) {
-				console.log(`Received packet of type ${PacketType[type]}, message: ${message.toString("hex", 1)}`);
+				console.log(`Received packet of type ${PacketType[type]}(0x${message.readInt8(0).toString(16)}), message: ${message.toString("hex", 1)}`);
 			} else if(!PacketType[type]) {
 				console.log(`Received unknown packet of type ${message.readUInt8(0)}`);
 			}
-			let packet: any;
-			try {
-				packet = (await import(`./packets/${PacketType[type].toLowerCase()}`)).default.deserialize(message);
-				if(packet.should_acknowledge) {
+			if(Object.keys(PacketsToAcknowledged).includes(PacketType[type])) {
+				let packet: any;
+				try {
+					packet = (await import(`./packets/${PacketType[type].toLowerCase()}`)).default.deserialize(message);
 					client.send(new AcknowledgementPacket(packet.nonce, 0xff).serialize());
+				} catch(e) {
+					packet = Packet.deserialize(message);
 				}
-
-			} catch(e) {
-				packet = Packet.deserialize(message);
 			}
 		});
 	

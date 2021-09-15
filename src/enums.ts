@@ -3,8 +3,8 @@ export enum AlterGameTag {
 };
 
 export enum ChatNoteType {
-	DID_VOTE = 0,
-}
+	DID_VOTE,
+};
 
 export enum PacketType {
 	NORMAL = 0x00,
@@ -14,4 +14,33 @@ export enum PacketType {
 	ACKNOWLEDGEMENT = 0x0a,
 	FRAGMENT = 0x0b,
 	PING = 0x0c,
-}
+};
+
+export enum PacketsToAcknowledged {
+	RELIABLE,
+	HELLO,
+	PING,
+};
+
+export enum DisconnectReason {
+	EXIT_GAME,
+	GAME_FULL,
+	GAME_STARTED,
+	GAME_NOT_FOUND,
+	INCORRECT_VERSION,
+	BANNED,
+	KICKED,
+	CUSTOM,
+	INVALID_NAME,
+	HACKING,
+	NOT_AUTHORIZED,
+	DESTROY,
+	ERROR,
+	INCORRECT_GAME,
+	SERVER_REQUEST,
+	SERVER_FULL,
+	FOCUS_LOST_BACKGROUND,
+	INTENTIONAL_LEAVING,
+	FOCUS_LOST,
+	NEW_CONNECTION,
+};
