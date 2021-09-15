@@ -30,4 +30,10 @@ export default class DisconnectPacket extends Packet {
 		buffer.copy(hazel_message.serialize(), 3);
 		return buffer;
 	}
+
+	public static deserialize(data: Buffer): DisconnectPacket {
+		const hazel_message = HazelMessage.deserialize(data.slice(3));
+		const message = hazel_message.payload.length > 0 ? hazel_message.payload.toString("utf8", 1) : undefined;
+		return new DisconnectPacket(data.readUInt8(1), data.readUInt8(2), message);
+	}
 }
