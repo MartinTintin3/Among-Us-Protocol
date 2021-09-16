@@ -1,7 +1,13 @@
 import { PacketType } from "../enums";
+import { byte } from "../types/numbers";
 
 export default class Packet {
-	public static type: PacketType;
+	public static type: byte;
+	public type: byte;
+
+	public constructor(type: byte) {
+		this.type = type;
+	}
 
 	serialize(): Buffer {
 		throw new Error(`Cannot serialize a base packet`);

@@ -1,22 +1,27 @@
 import { DisconnectReason, PacketType } from "../enums";
-import { HazelMessage } from "../HazelMessage";
+import HazelMessage from "../HazelMessage";
 import { byte } from "../types/numbers";
-import Packet from "./packet";
+import Packet from "./Packet";
 
 export default class DisconnectPacket extends Packet {
 	public static readonly type: PacketType = PacketType.DISCONNECT;
 	public readonly forced: byte;
 	public readonly reason: DisconnectReason;
-	public readonly message?: string;
+	public readonly message: string;
 
-	public constructor(forced: byte, reason: DisconnectReason, message?: string) {
-		super();
+	public constructor(forced?: byte, reason?: DisconnectReason, message?: string) {
+		super(DisconnectPacket.type);
 		this.forced = forced;
 		this.reason = reason;
 		this.message = message;
 	}
 
 	public serialize(): Buffer {
+		if(this.forced == undefined) {
+			const buffer = Buffer.alloc(1);
+			buffer.writeUInt8(DisconnectPacket.type, 0);
+			return buffer;
+		}
 		const hazel_buffer = Buffer.alloc(1 + this.message ? this.message.length + 1 : 0);
 		hazel_buffer.writeUInt8(this.reason, 0);
 		if(this.message) {
@@ -26,14 +31,15 @@ export default class DisconnectPacket extends Packet {
 		const hazel_message = new HazelMessage(0x00, hazel_buffer);
 		const buffer: Buffer = Buffer.alloc(3);
 		buffer.writeUInt8(DisconnectPacket.type, 0);
-		buffer.writeUInt8(this.forced, 1);
+		if(this.forced != undefined) buffer.writeUInt8(this.forced, 1);
 		buffer.copy(hazel_message.serialize(), 3);
 		return buffer;
 	}
 
 	public static deserialize(data: Buffer): DisconnectPacket {
+		if(data.length == 1) return new DisconnectPacket();
 		const hazel_message = HazelMessage.deserialize(data.slice(3));
 		const message = hazel_message.payload.length > 0 ? hazel_message.payload.toString("utf8", 1) : undefined;
-		return new DisconnectPacket(data.readUInt8(1), data.readUInt8(2), message);
+		return new DisconnectPacket(data.length > 1 ? data.readUInt8(1) : undefined, data.readUInt8(2), message);
 	}
 }

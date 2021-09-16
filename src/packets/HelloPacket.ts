@@ -1,6 +1,6 @@
 import { PacketType } from "../enums";
 import { byte, int32, uint16 } from "../types/numbers";
-import Packet from "./packet";
+import Packet from "./Packet";
 
 export default class HelloPacket extends Packet {
 	public static readonly type: PacketType = PacketType.HELLO;
@@ -10,7 +10,7 @@ export default class HelloPacket extends Packet {
 	public readonly username: string;
 
 	constructor(nonce: uint16, hazel_version: byte, client_version: int32, username: string) {
-		super();
+		super(HelloPacket.type);
 		this.nonce = nonce;
 		this.hazel_version = hazel_version;
 		this.client_version = client_version;

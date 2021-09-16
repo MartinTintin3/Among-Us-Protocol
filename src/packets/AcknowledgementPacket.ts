@@ -1,6 +1,6 @@
 import { PacketType } from "../enums";
 import { byte, uint16 } from "../types/numbers";
-import Packet from "./packet";
+import Packet from "./Packet";
 
 export default class AcknowledgementPacket extends Packet {
 	public static readonly type: PacketType = PacketType.ACKNOWLEDGEMENT;
@@ -8,7 +8,7 @@ export default class AcknowledgementPacket extends Packet {
 	public readonly missing_packets: byte;
 
 	public constructor(nonce: uint16, missing_packets: byte) {
-		super();
+		super(AcknowledgementPacket.type);
 		this.nonce = nonce;
 		this.missing_packets = missing_packets;
 	}

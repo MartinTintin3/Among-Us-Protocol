@@ -1,13 +1,13 @@
 import { PacketType } from "../enums";
 import { uint16 } from "../types/numbers";
-import Packet from "./packet";
+import Packet from "./Packet";
 
 export default class PingPacket extends Packet {
 	public static readonly type: PacketType = PacketType.PING;
 	public readonly nonce: uint16
 
 	public constructor(nonce: number) {
-		super();
+		super(PingPacket.type);
 		this.nonce = nonce;
 	}
 

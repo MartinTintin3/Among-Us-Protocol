@@ -1,7 +1,7 @@
 import { PacketType } from "../enums";
-import { HazelMessage } from "../HazelMessage";
+import HazelMessage from "../HazelMessage";
 import { uint16, uint32 } from "../types/numbers";
-import Packet from "./packet";
+import Packet from "./Packet";
 
 export default class ReliablePacket extends Packet {
 	public static readonly type: PacketType = PacketType.RELIABLE;
@@ -9,7 +9,7 @@ export default class ReliablePacket extends Packet {
 	public readonly payload: Array<HazelMessage>;
 
 	constructor(nonce: number, payload: Array<HazelMessage>) {
-		super();
+		super(ReliablePacket.type);
 		this.nonce = nonce;
 		this.payload = payload;
 	}

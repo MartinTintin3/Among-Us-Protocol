@@ -1,4 +1,4 @@
-export class Version {
+export default class Version {
 	public year: number;
 	public month: number;
 	public day: number;

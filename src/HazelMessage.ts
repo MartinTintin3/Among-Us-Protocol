@@ -1,6 +1,6 @@
 import { byte, uint16 } from "./types/numbers";
 
-export class HazelMessage {
+export default class HazelMessage {
 	length: uint16;
 	tag: byte;
 	payload: Buffer;

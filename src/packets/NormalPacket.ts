@@ -1,13 +1,13 @@
 import { PacketType } from "../enums";
-import { HazelMessage } from "../HazelMessage";
-import Packet from "./packet";
+import HazelMessage from "../HazelMessage";
+import Packet from "./Packet";
 
 export default class NormalPacket extends Packet {
 	public static readonly type: PacketType = PacketType.NORMAL;
 	public readonly payload: Array<HazelMessage>;
 
 	public constructor(payload: Array<HazelMessage>) {
-		super();
+		super(NormalPacket.type);
 		this.payload = payload;
 	}
 
