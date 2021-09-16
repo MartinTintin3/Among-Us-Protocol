@@ -4,8 +4,8 @@
   "description": "",
   "main": "out/main.js",
   "scripts": {
-    "start": "rm -r out && npx tsc && cd out && node main.js",
-	"test": "rm -r out && npx tsc && cd out && node out/test.js"
+    "start": "rm -rf out/* && npx tsc && cd out && node main.js",
+	"test": "rm -rf out/* && npx tsc && cd out && node out/test.js"
   },
   "keywords": [],
   "author": "",

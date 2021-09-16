@@ -2,8 +2,8 @@ import { PacketType } from "../enums";
 import { byte } from "../types/numbers";
 
 export default class Packet {
-	public static type: byte;
-	public type: byte;
+	public static type: byte = undefined;
+	public type: byte = undefined;
 
 	public constructor(type: byte) {
 		this.type = type;
