@@ -1,6 +1,7 @@
+import Serializable from "../interfaces/Serializable";
 import { byte, uint32 } from "../types/numbers";
 
-export default class IPv4 {
+export default class IPv4 implements Serializable {
 	public a: byte;
 	public b: byte;
 	public c: byte;

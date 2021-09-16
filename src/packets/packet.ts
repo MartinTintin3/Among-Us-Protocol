@@ -1,7 +1,8 @@
 import { Bound, PacketType } from "../enums";
+import Serializable from "../interfaces/Serializable";
 import { byte } from "../types/numbers";
 
-export default class Packet {
+export default class Packet implements Serializable {
 	public static type: byte = undefined;
 	public type: byte = undefined;
 	public readonly bound: Bound

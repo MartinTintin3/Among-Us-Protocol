@@ -1,8 +1,9 @@
 import { Bound, PacketType } from "../enums";
+import Serializable from "../interfaces/Serializable";
 import { uint16 } from "../types/numbers";
 import Packet from "./Packet";
 
-export default class PingPacket extends Packet {
+export default class PingPacket extends Packet implements Serializable {
 	public static readonly type: PacketType = PacketType.PING;
 	public readonly nonce: uint16
 

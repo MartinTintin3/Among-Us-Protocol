@@ -1,8 +1,9 @@
 import { Bound, PacketType } from "../enums";
 import HazelMessage from "../HazelMessage";
+import Serializable from "../interfaces/Serializable";
 import Packet from "./Packet";
 
-export default class NormalPacket extends Packet {
+export default class NormalPacket extends Packet implements Serializable {
 	public static readonly type: PacketType = PacketType.NORMAL;
 	public readonly payloads: Array<HazelMessage>;
 

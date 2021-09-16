@@ -1,8 +1,9 @@
 import { Bound, PacketType } from "../enums";
+import Serializable from "../interfaces/Serializable";
 import { byte, uint16 } from "../types/numbers";
 import Packet from "./Packet";
 
-export default class AcknowledgementPacket extends Packet {
+export default class AcknowledgementPacket extends Packet implements Serializable {
 	public static readonly type: PacketType = PacketType.ACKNOWLEDGEMENT;
 	public readonly nonce: uint16;
 	public readonly missing_packets: byte;

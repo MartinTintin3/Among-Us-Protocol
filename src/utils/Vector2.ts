@@ -1,6 +1,7 @@
+import Serializable from "../interfaces/Serializable";
 import { lerp, alerp, clamp } from "./math";
 
-export default class Vector2 {
+export default class Vector2 implements Serializable {
 	public x: number;
 	public y: number;
 

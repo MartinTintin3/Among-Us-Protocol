@@ -1,8 +1,9 @@
 import { Bound, PacketType } from "../enums";
+import Serializable from "../interfaces/Serializable";
 import { byte, int32, uint16 } from "../types/numbers";
 import Packet from "./Packet";
 
-export default class HelloPacket extends Packet {
+export default class HelloPacket extends Packet implements Serializable {
 	public static readonly type: PacketType = PacketType.HELLO;
 	public readonly nonce: uint16;
 	public readonly hazel_version: byte;

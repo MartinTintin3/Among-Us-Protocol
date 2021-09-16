@@ -1,7 +1,8 @@
+import Serializable from "../interfaces/Serializable";
 import { byte, int32, uint16, uint32 } from "../types/numbers";
 import IPv4 from "../utils/IPv4";
 
-export default class GameList {
+export default class GameList implements Serializable {
 	public ip: IPv4;
 	public port: uint16;
 	public game_id: int32;

@@ -1,4 +1,6 @@
-export default class Version {
+import Serializable from "../interfaces/Serializable";
+
+export default class Version implements Serializable {
 	public year: number;
 	public month: number;
 	public day: number;
@@ -15,11 +17,14 @@ export default class Version {
 		return this.year * 25000 + this.month * 1800 + this.day * 50 + this.revision;
 	}
 
-	public from_number(version: number) {
-		this.year = Math.floor(version / 25000);
-		this.month = Math.floor((version %= 25000) / 1800);
-		this.day = Math.floor((version %= 1800) / 50);
-		this.revision = version % 50;
+	public serialize(): Buffer {
+		const buffer = Buffer.alloc(4);
+		buffer.writeUInt32LE(this.to_number());
+		return buffer;
+	}
+
+	public static deserialize(buffer: Buffer): Version {
+		return Version.from_number(buffer.readUInt32LE());
 	}
 
 	public static to_number(year: number, month: number, day: number, revision: number): number {

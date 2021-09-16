@@ -1,9 +1,10 @@
 import { Bound, DisconnectReason, PacketType } from "../enums";
 import HazelMessage from "../HazelMessage";
+import Serializable from "../interfaces/Serializable";
 import { byte } from "../types/numbers";
 import Packet from "./Packet";
 
-export default class DisconnectPacket extends Packet {
+export default class DisconnectPacket extends Packet implements Serializable {
 	public static readonly type: PacketType = PacketType.DISCONNECT;
 	public readonly forced: byte;
 	public readonly reason: DisconnectReason;
@@ -39,7 +40,7 @@ export default class DisconnectPacket extends Packet {
 	public static deserialize(data: Buffer, bound: Bound): DisconnectPacket {
 		if(data.length == 1) return new DisconnectPacket(bound);
 		const hazel_message = HazelMessage.deserialize(data.slice(3));
-		const message = hazel_message.payload.length > 0 ? hazel_message.payload.toString("utf8", 1) : undefined;
+		const message = hazel_message.get_payload_length() > 0 ? hazel_message.payload.toString("utf8", 1) : undefined;
 		return new DisconnectPacket(bound, data.length > 1 ? data.readUInt8(1) : undefined, data.readUInt8(2), message);
 	}
 }
