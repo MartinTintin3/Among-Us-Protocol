@@ -1,13 +1,14 @@
 import IHandler from "./handlers/IHandler";
 import * as fs from "fs";
 import * as udp from "dgram";
+import { join } from "path";
 import Packet from "./packets/Packet";
 
 export default class HandlerManager {
 	private readonly handlers: Array<typeof IHandler> = new Array<typeof IHandler>();
 
 	public register_group(path: string): void {
-		for(const file of fs.readdirSync(path)) {
+		for(const file of fs.readdirSync(join(__dirname, path))) {
 			if(!file.startsWith(IHandler.name) && (file.endsWith(".ts") || file.endsWith(".js"))) {
 				const handler = require(`./${path}/${file}`).default;
 				this.register_handler(handler);

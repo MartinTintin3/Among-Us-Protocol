@@ -1,6 +1,6 @@
 import * as udp from "dgram";
 import * as fs from "fs";
-import { PacketType } from "./enums";
+import { Bound, PacketType } from "./enums";
 import HandlerManager from "./HandlerManager";
 import IHandler from "./handlers/IHandler";
 import PacketParser from "./PacketParser";
@@ -24,7 +24,7 @@ export default class Client {
 			this.connected = true;
 			console.log(`Connected to ${this.socket.remoteAddress().address}:${this.socket.remoteAddress().port}`);
 		
-			this.socket.send(new HelloPacket(1, 1, Version.to_number(2021, 6, 30, 0), "Martin").serialize());
+			this.socket.send(new HelloPacket(1, 1, Version.to_number(2021, 6, 30, 0), "Martin", Bound.SERVER).serialize());
 		
 			this.socket.on("message", async message => {
 				const type: PacketType = message.readUInt8(0);
@@ -33,7 +33,7 @@ export default class Client {
 				} else if(!PacketType[type]) {
 					console.log(`Received unknown packet of type ${message.readUInt8(0)}`);
 				}
-				const packet: any = this.packet_parser.parse(message);
+				const packet: any = this.packet_parser.parse(message, Bound.CLIENT);
 				this.handler_manager.handle(this.socket, packet);
 			});
 		

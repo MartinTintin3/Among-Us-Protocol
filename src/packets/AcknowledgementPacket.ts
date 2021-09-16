@@ -1,4 +1,4 @@
-import { PacketType } from "../enums";
+import { Bound, PacketType } from "../enums";
 import { byte, uint16 } from "../types/numbers";
 import Packet from "./Packet";
 
@@ -7,8 +7,8 @@ export default class AcknowledgementPacket extends Packet {
 	public readonly nonce: uint16;
 	public readonly missing_packets: byte;
 
-	public constructor(nonce: uint16, missing_packets: byte) {
-		super(AcknowledgementPacket.type);
+	public constructor(nonce: uint16, missing_packets: byte, bound: Bound) {
+		super(AcknowledgementPacket.type, bound);
 		this.nonce = nonce;
 		this.missing_packets = missing_packets;
 	}
@@ -21,7 +21,7 @@ export default class AcknowledgementPacket extends Packet {
 		return buffer;
 	}
 
-	public static deserialize(buffer: Buffer): AcknowledgementPacket {
-		return new AcknowledgementPacket(buffer.readUInt16BE(1), buffer.readUInt8(3));
+	public static deserialize(buffer: Buffer, bound: Bound): AcknowledgementPacket {
+		return new AcknowledgementPacket(buffer.readUInt16BE(1), buffer.readUInt8(3), bound);
 	}
 }

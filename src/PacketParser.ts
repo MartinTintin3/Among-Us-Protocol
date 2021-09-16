@@ -1,12 +1,14 @@
 import Packet from "./packets/Packet";
 import * as fs from "fs";
+import { join } from "path";
 import { byte } from "./types/numbers";
+import { Bound } from "./enums";
 
 export default class PacketParser {
 	private readonly packets: Map<byte, typeof Packet> = new Map<byte, typeof Packet>();
 
 	public register_group(path: string): void {
-		for(const file of fs.readdirSync(path)) {
+		for(const file of fs.readdirSync(join(__dirname, path))) {
 			if((file.endsWith(".ts") || file.endsWith(".js"))) {
 				const packet = require(`${path}/${file}`).default;
 				this.register_packet(packet);
@@ -26,12 +28,12 @@ export default class PacketParser {
 		return this.packets.get(type);
 	}
 
-	public parse(data: Buffer): Packet {
+	public parse(data: Buffer, bound: Bound): Packet {
 		const type = data.readUInt8(0);
 		const packet = this.packets.get(type);
 		if(!packet) {
 			throw new Error(`Unknown packet type ${type}`);
 		}
-		return packet.deserialize(data);
+		return packet.deserialize(data, bound);
 	}
 }

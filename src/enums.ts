@@ -44,3 +44,8 @@ export enum DisconnectReason {
 	FOCUS_LOST,
 	NEW_CONNECTION,
 };
+
+export enum Bound {
+	CLIENT,
+	SERVER,
+}

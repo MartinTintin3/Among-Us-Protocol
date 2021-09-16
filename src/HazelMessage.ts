@@ -6,7 +6,7 @@ export default class HazelMessage {
 	payload: Buffer;
 
 	constructor(tag: number, payload: Buffer) {
-		this.length = payload.length;
+		this.length = 3 + payload.length;
 		this.tag = tag;
 		this.payload = payload;
 	}
@@ -21,6 +21,6 @@ export default class HazelMessage {
 
 	public static deserialize(buffer: Buffer): HazelMessage {
 		const length = buffer.readUInt16BE(0);
-		return new HazelMessage(buffer.readUInt8(2), buffer.slice(3, length));
+		return new HazelMessage(buffer.readUInt8(2), buffer.length > 3 ? buffer.slice(3, length) : Buffer.alloc(0));
 	}
 }

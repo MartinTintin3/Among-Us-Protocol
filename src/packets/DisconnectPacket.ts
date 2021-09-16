@@ -1,4 +1,4 @@
-import { DisconnectReason, PacketType } from "../enums";
+import { Bound, DisconnectReason, PacketType } from "../enums";
 import HazelMessage from "../HazelMessage";
 import { byte } from "../types/numbers";
 import Packet from "./Packet";
@@ -9,8 +9,8 @@ export default class DisconnectPacket extends Packet {
 	public readonly reason: DisconnectReason;
 	public readonly message: string;
 
-	public constructor(forced?: byte, reason?: DisconnectReason, message?: string) {
-		super(DisconnectPacket.type);
+	public constructor(bound: Bound, forced?: byte, reason?: DisconnectReason, message?: string) {
+		super(DisconnectPacket.type, bound);
 		this.forced = forced;
 		this.reason = reason;
 		this.message = message;
@@ -36,10 +36,10 @@ export default class DisconnectPacket extends Packet {
 		return buffer;
 	}
 
-	public static deserialize(data: Buffer): DisconnectPacket {
-		if(data.length == 1) return new DisconnectPacket();
+	public static deserialize(data: Buffer, bound: Bound): DisconnectPacket {
+		if(data.length == 1) return new DisconnectPacket(bound);
 		const hazel_message = HazelMessage.deserialize(data.slice(3));
 		const message = hazel_message.payload.length > 0 ? hazel_message.payload.toString("utf8", 1) : undefined;
-		return new DisconnectPacket(data.length > 1 ? data.readUInt8(1) : undefined, data.readUInt8(2), message);
+		return new DisconnectPacket(bound, data.length > 1 ? data.readUInt8(1) : undefined, data.readUInt8(2), message);
 	}
 }
