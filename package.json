@@ -4,8 +4,9 @@
   "description": "",
   "main": "out/main.js",
   "scripts": {
-    "start": "rm -rf out/* && npx tsc && cd out && node main.js",
-	"test": "rm -rf out/* && npx tsc && cd out && node out/test.js"
+    "build": "rm -rf out/* && npx tsc",
+	"start": "cd out && node main.js && cd ..",
+	"proxy": "cd out/proxy && node main.js cd ../.."
   },
   "keywords": [],
   "author": "",
